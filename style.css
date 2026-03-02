@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+html { padding: 10px; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("assets/background/background.JPG") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.cookie-clicker-img {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  background: url("assets/cookie.PNG") no-repeat center center;
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.cookie-clicker-img:hover {
+  transform: scale(0.95);
+  transition: transform 0.2s ease-in-out;
+}
+
+.cookie-clicker-img:active {
+  transform: scale(0.9);
+  transition: transform 0.2s ease-in-out;
+}
+.container {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.statistics {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 100px;
+}
+
+.cookie-stats {
+  width: 300px;
+  text-align: center;
+  padding: 10px;
+  color: #fff;
+  background: rgba(50, 50, 50, 0.4);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 5px #000;
+}
+
+.shop .building-upgrades {
+  width: 370px;
+  height: 320px;
+  padding: 10px;
+  background: #ddd;
+  box-shadow: 0 0 5px #000;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+
+.shop .building-upgrade {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 350px;
+  height: 70px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #fff;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.shop .building-upgrade .section-left img {
+  width: 40px;
+  height: 40px;
+}
+
+.shop .building-upgrade .section-middle .building-text .building-name {
+  font-size: 26px;
+}
+
+.shop .building-upgrade .section-right .building-level {
+  font-size: 40px;
+}
+
+.shop .building-upgrade .section-middle .building-text {
+  position: relative;
+  right: 70px;
+}
+
+.shop .building-upgrade .section-middle .building-text .cookie-cost-image {
+  width: 12px;
+  height: 12px;
+}
+
+.settings {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.settings .btn {
+  width: 60px;
+  height: 40px;
+  border: 2px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 5px #000;
+}
+
+.shop h2,
+.achievement-title {
+  color: #fff;
+  text-shadow: 0 0 5px #000;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.status,
+.version,
+.game-title,
+.last-saved,
+.load-status {
+  color: #fff;
+  text-shadow: 0 0 5px #000;
+  font-size: 12px;
+}
+
+.load-status,
+.game-title {
+  margin-bottom: 10px;
+}
+
+.shop .powerful-upgrades {
+  display: flex;
+  align-items: center;
+  width: 370px;
+  height: 130px;
+  padding: 10px;
+  background: #ddd;
+  box-shadow: 0 0 5px #000;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.shop .powerful-upgrades .powerful-upgrade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.powerful-upgrade img {
+  width: 70px;
+  height: 70px;
+}
+
+.achievements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  width: 270px;
+  height: 500px;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: #ddd;
+  box-shadow: 0 0 5px #000;
+}
+
+.achievement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 80px;
+  height: 130px;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 9px;
+  margin-bottom: 10px;
+  pointer-events: none;
+}
+
+.achievement img {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 3px;
+}
+
+.achievement .achievement-name {
+  margin-bottom: 2px;
+}
+
+.achievement .achievement-name.small {
+  font-size: 5px;
+}
+
+.achievement .achievement-description {
+  font-size: 6px;
+  margin-bottom: 2px;
+}
+
+.achievement .achievement-description.small {
+  font-size: 4px;
+}
+
+.floating-number {
+  position: absolute;
+  pointer-events: none; /* Prevents text selection/blocking clicks */
+  color: #fff; /* White text for visibility */
+  text-shadow: 0 0 5px #000;
+  animation: floatUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
