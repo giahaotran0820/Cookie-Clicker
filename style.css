@@ -22,8 +22,6 @@ body {
   width: 200px;
   height: 200px;
   cursor: pointer;
-  background: url("assets/cookie.PNG") no-repeat center center;
-  background-size: cover;
   border-radius: 50%;
 }
 
@@ -166,6 +164,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   width: 100px;
   height: 100px;
@@ -222,7 +221,7 @@ body {
 }
 
 .achievement .achievement-name.small {
-  font-size: 5px;
+  font-size: 6px;
 }
 
 .achievement .achievement-description {

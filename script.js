@@ -1,8 +1,8 @@
 /**
  * Cookie Clicker Game - A simple cookie clicker game with upgrades and achievements.
  * @description: A simple cookie clicker game with upgrades and achievements.
- * @version: 1.0.0
- * @date: 2-28-2026
+ * @version: 1.1.0
+ * @date: 3-7-2026
  * @author: https://github.com/giahaotran0820
  * @license: MIT
  */
@@ -11,6 +11,7 @@ var Game = (function () {
   const cookies = document.getElementById("cookies");
   const cookieClickerBtn = document.querySelector(".cookie-clicker-img");
   const cookiePerSecond = document.getElementById("cookie-per-second");
+  const floatingNumber = document.querySelector(".floating-number");
 
   const buildingUpgradeElement = document.querySelector(".building-upgrades");
   const powerfulUpgradeElement = document.querySelector(".powerful-upgrades");
@@ -35,6 +36,7 @@ var Game = (function () {
     const tier = Math.log10(Math.abs(number)) / 3 | 0;
     const scaled = number / Math.pow(10, tier * 3);
     const suffix = suffixes[tier];
+    
     if (tier == suffixes.length) {
       const exponent = Math.floor(Math.log10(Math.abs(number)));
       const mantissa = number / Math.pow(10, exponent);
@@ -80,7 +82,7 @@ var Game = (function () {
       "Factory",
       "Bank"
     ],
-    cost: [10, 100, 800, 6000, 23000, 147000],
+    cost: [10, 100, 800, 4700, 26000, 140000],
     level: [0, 0, 0, 0, 0, 0],
     perSecond: [0.1, 1, 8, 47, 260, 1400],
     image: [
@@ -99,8 +101,7 @@ var Game = (function () {
         this.cost[index] = Math.round(this.cost[index] * this.costMultiplier[index]);
 
         updateBuildingUpgrades();
-        updateCookie();
-        updateCookiePerSecond();
+        updateScore();
       } else {
         alert(`Not enough cookies! You need ${round(this.cost[index] - stats.cookieCount)} more cookies to buy this building upgrade!`);
       }
@@ -109,43 +110,51 @@ var Game = (function () {
 
   let powerfulUpgrade = {
     name: [
-      "Stone Fingers",
-      "Iron Fingers",
-      "Click Frenzy"
+      "Reinforced Index Finger",
+      "Carpal Tunnel Prevention Cream",
+      "Forwards From Grandma"
     ],
     image: [
-      "assets/cursor.PNG",
-      "assets/cursor.PNG",
-      "assets/cookie.PNG"
+      "assets/reinforced_index_finger.jpg",
+      "assets/carpal_tunnel_prevention_cream.jpg",
+      "assets/forwards_from_grandma.jpg"
     ],
     type: [
       "building",
       "building",
-      "click"
+      "building"
     ],
     description: [
-      "Cursors are twice as effecient",
-      "Cursors are twice as effecient",
-      "Clicking the big cookie per click gives x2 cookie per click"
+      "The mouse and cursors are twice as efficient.",
+      "The mouse and cursors are twice as efficient.",
+      "Grandmas are twice as efficient."
     ],
-    cost: [300, 1000, 500],
-    buildingIndex: [0, 0, -1],
-    requirement: [1, 5, 1],
+    cost: [300, 500, 1000],
+    buildingIndex: [0, 0, 1],
+    requirement: [1, 1, 1],
     bonus: [2, 2, 2],
     purchased: [false, false, false],
     purchaseUpgrade: function (index) {
       if (!this.purchased[index] && stats.cookieCount >= this.cost[index]) {
         if (
-          this.type[index] == "building" && 
+          this.type[index] == "building" && this.buildingIndex !== -1 &&
           buildingUpgrade.level[this.buildingIndex[index]] >= this.requirement[index]
         ) {
-          stats.cookieCount -= this.cost[index];
-          buildingUpgrade.perSecond[this.buildingIndex[index]] *= this.bonus[index];
-          this.purchased[index] = true;
+          if (buildingUpgrade.name[this.buildingIndex[index]] == "Cursor") {
+            stats.cookieCount -= this.cost[index];
+            stats.cookiePerClick *= this.bonus[index];
+            this.purchased[index] = true;
 
-          updateBuildingUpgrades();
-          updateCookie();
-          updateCookiePerSecond();
+            updateBuildingUpgrades();
+            updateScore();
+          } else {
+            stats.cookieCount -= this.cost[index];
+            buildingUpgrade.perSecond[this.buildingIndex[index]] *= this.bonus[index];
+            this.purchased[index] = true;
+
+            updateBuildingUpgrades();
+            updateScore();
+          }
         } else if (
           this.type[index] == "click" && 
           stats.cookiePerClick >= this.requirement[index]
@@ -155,8 +164,7 @@ var Game = (function () {
           this.purchased[index] = true;
 
           updateBuildingUpgrades();
-          updateCookie();
-          updateCookiePerSecond();
+          updateScore();
         }
       } else {
         alert(`Not enough cookies! You need ${round(this.cost[index] - stats.cookieCount)} more cookies to buy this powerful upgrade!`);
@@ -169,7 +177,7 @@ var Game = (function () {
       "First Click",
       "First Cookie",
       "First Grandma",
-      "First Powerful Upgrade \"Stone Fingers\"",
+      "First Powerful Upgrade",
       "First Farm",
       "1,000 Cookies",
       "First Mine"
@@ -178,7 +186,7 @@ var Game = (function () {
       "Click the cookie for the first time",
       "Get your first cookie",
       "Buy your first grandma",
-      "Purchase your first powerful upgrade \"Stone Fingers\"",
+      "Purchase your first powerful upgrade",
       "Buy your first farm",
       "Get 1,000 cookies",
       "Buy your first mine"
@@ -187,7 +195,7 @@ var Game = (function () {
       "assets/cookie.PNG",
       "assets/cookie.PNG",
       "assets/grandma.JPG",
-      "assets/cursor.PNG",
+      "assets/reinforced_index_finger.jpg",
       "assets/farm.JPG",
       "assets/cookie.PNG",
       "assets/mine.PNG"
@@ -218,12 +226,12 @@ var Game = (function () {
     }
   }
 
-  function updateCookie() {
-    cookies.innerHTML = stats.getCookieCount(stats.cookieCount);
-  }
+  function updateCookie() { cookies.innerHTML = stats.getCookieCount(stats.cookieCount); }
+  function updateCookiePerSecond() { cookiePerSecond.innerHTML = round(stats.getPerSecond()); }
 
-  function updateCookiePerSecond() {
-    cookiePerSecond.innerHTML = round(stats.getPerSecond());
+  function updateScore() {
+    updateCookie();
+    updateCookiePerSecond();
   }
 
   function randomNumber(min, max) {
@@ -232,7 +240,7 @@ var Game = (function () {
 
   function clickerCookieBtn(e) {
     stats.cookieCount += stats.cookiePerClick;
-    updateCookie();
+    updateScore();
 
     const floatingNum = document.createElement('div');
     floatingNum.classList.add('floating-number');
@@ -246,7 +254,7 @@ var Game = (function () {
 
     const position = {
       x: e.clientX + randomX - addNumberMovementClicker.left,
-      y: e.clientY + randomY - addNumberMovementClicker.top
+      y: e.clientY + randomY - addNumberMovementClicker.top - cookieClickerBtn.height
     }
 
     // 2. Position it at the mouse click
@@ -254,7 +262,7 @@ var Game = (function () {
     floatingNum.style.top = `${position.y}px`;
 
     // 3. Append it to the screen
-    cookieClickerBtn.appendChild(floatingNum);
+    floatingNumber.appendChild(floatingNum);
 
     // 4. Remove after animation (usually 1-2 seconds)
     let timeoutId = setTimeout(() => {
@@ -272,41 +280,25 @@ var Game = (function () {
     buildingUpgradeElement.innerHTML = "";
     for (let i = 0; i < buildingUpgrade.name.length; i++) {
       const buildUpg = buildingUpgrade;
-
-      // Replace placeholders with actual values using regex
-      const regex = new RegExp("{{([^}]+)}}", "g"); // Matches {{key}}
-      const replacerBuildUpgId = (match, key) => {
-        switch (key) {
-          case "name": return buildUpg.name[i];
-          case "cost": return round(buildUpg.cost[i]);
-          case "level": return buildUpg.level[i];
-          case "image": return buildUpg.image[i];
-          case "id": return buildUpg.name[i].toLowerCase().replace(/\s+/g, "-");
-        }
-        return match;
-      }
-
       buildingUpgradeElement.innerHTML += `
         <div class="building-upgrade">
           <div class="section-left">
-            <img class="building-image" src="{{image}}">
+            <img class="building-image" src="${buildUpg.image[i]}">
           </div>
           <div class="section-middle">
             <div class="building-text">
-              <div class="building-name">{{name}}</div>
-              <div class="building-cost" id="{{id}}-cost">
-                {{cost}}
+              <div class="building-name">${buildUpg.name[i]}</div>
+              <div class="building-cost" id="${buildUpg.name[i].toLowerCase()}-cost">
+                <span>${buildUpg.cost[i]}</span>
                 <img class="cookie-cost-image" src="assets/cookie.PNG">
               </div>
             </div>
           </div>
           <div class="section-right">
-            <div class="building-level" id="{{id}}-level">{{level}}</div>
+            <div class="building-level" id="${buildUpg.name[i].toLowerCase()}-level">${buildUpg.level[i]}</div>
           </div>
         </div>
       `;
-
-      buildingUpgradeElement.innerHTML = buildingUpgradeElement.innerHTML.replace(regex, replacerBuildUpgId).replace(/\n/g, "");
 
       const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
       buildingUpgradeBtn.forEach((btn, index) => {
@@ -323,49 +315,31 @@ var Game = (function () {
     powerfulUpgradeElement.innerHTML = "";
     for (let i = 0; i < powerfulUpgrade.name.length; i++) {
       const powUpg = powerfulUpgrade;
-
-      // Replace placeholders with actual values using regex
-      const regex = new RegExp("{{([^}]+)}}", "g"); // Matches {{key}}
-      const replacerPowUpgId = (match, key) => {
-        switch (key) {
-          case "name": return powUpg.name[i];
-          case "image": return powUpg.image[i];
-        }
-        return match;
-      }
-
       if (!powUpg.purchased[i]) {
         if (
-          powUpg.type[i] == "building" && 
+          powUpg.type[i] == "building" && powUpg.buildingIndex !== -1 &&
           buildingUpgrade.level[powUpg.buildingIndex[i]] >= powUpg.requirement[i]
         ) {
           powerfulUpgradeElement.innerHTML += `
-            <div class="powerful-upgrade">
-              <img class="powerful-image" src="{{image}}">
-              <div class="powerful-name">{{name}}</div>
+            <div class="powerful-upgrade" id="${powUpg.name[i]}">
+              <img class="powerful-image" src="${powUpg.image[i]}">
             </div>
           `;
-          document.querySelector(".powerful-upgrade").onclick = () => {
-            powerfulUpgrade.purchaseUpgrade(i);
-          }
         } else if (
           powUpg.type[i] == "click" && 
           stats.cookiePerClick >= powUpg.requirement[i]
         ) {
            powerfulUpgradeElement.innerHTML += `
-             <div class="powerful-upgrade">
-               <img class="powerful-image" src="{{image}}">
-               <div class="powerful-name">{{name}}</div>
+             <div class="powerful-upgrade" id="${powUpg.name[i]}">
+               <img class="powerful-image" src="${powUpg.image[i]}">
              </div>
            `;
         }
       }
-
-      powerfulUpgradeElement.innerHTML = powerfulUpgradeElement.innerHTML.replace(regex, replacerPowUpgId).replace(/\n/g, "");
       const powerfulUpgradeBtn = document.querySelectorAll(".powerful-upgrade");
       powerfulUpgradeBtn.forEach((btn, index) => {
         btn.onclick = () => {
-          const powUpgIndex = Array.from(powUpg.name).indexOf(btn.querySelector(".powerful-name").textContent)
+          const powUpgIndex = Array.from(powUpg.name).indexOf(btn.id);
           const getIndex = powUpgIndex !== -1 ? powUpgIndex : index;
           powerfulUpgrade.purchaseUpgrade(getIndex);
         }
@@ -378,45 +352,31 @@ var Game = (function () {
     for (let i = 0; i < achievement.name.length; i++) {
       const ach = achievement;
       const statusAch = ach.unlocked[i] ? "Unlocked" : "Locked";
-
-      // Replace placeholders with actual values using regex
-      const regex = new RegExp("{{([^}]+)}}", "g"); // Matches {{key}}
-      const replacerAchId = (match, key) => {
-        switch (key) {
-          case "name": return ach.name[i];
-          case "description": return ach.description[i];
-          case "image": return ach.image[i];
-          case "status": return statusAch;
-        }
-        return match;
-      }
-
       if (ach.unlocked[i]) {
-        if (ach.name[i] !== "First Powerful Upgrade \"Stone Fingers\"") {
+        if (ach.name[i] == "First Powerful Upgrade") {
           achievementElement.innerHTML += `
             <div class="achievement">
-              <img class="achievement-image" src="{{image}}">
-              <div class="achievement-name">{{name}}</div>
-              <div class="achievement-description">{{description}}</div>
-              <div class="achievement-status">{{status}}</div>
+              <img class="achievement-image" src="${ach.image[i]}">
+              <div class="achievement-name small">${ach.name[i]}</div>
+              <div class="achievement-description small">${ach.description[i]}</div>
+              <div class="achievement-status">${statusAch}</div>
             </div>
           `;
         } else {
           achievementElement.innerHTML += `
             <div class="achievement">
-              <img class="achievement-image" src="{{image}}">
-              <div class="achievement-name small">{{name}}</div>
-              <div class="achievement-description small">{{description}}</div>
-              <div class="achievement-status">{{status}}</div>
+              <img class="achievement-image" src="${ach.image[i]}">
+              <div class="achievement-name">${ach.name[i]}</div>
+              <div class="achievement-description">${ach.description[i]}</div>
+              <div class="achievement-status">${statusAch}</div>
             </div>
           `;
-        }
+        } 
       }
-      achievementElement.innerHTML = achievementElement.innerHTML.replace(regex, replacerAchId).replace(/\n/g, "");
     }
   }
 
-  let fps = 10; // frames per second
+  let fps = 15; // frames per second
 
   // Prevent circular references
   function circlicReplacer() {
@@ -442,7 +402,7 @@ var Game = (function () {
       buildingUpgradePerSecond: buildingUpgrade.perSecond,
       powerfulUpgradePurchased: powerfulUpgrade.purchased,
       achievementUnlocked: achievement.unlocked,
-      version: "1.0.0",
+      version: "1.1.0",
       date: new Date().toLocaleString(),
       author: "https://github.com/giahaotran0820",
       description: "A simple cookie clicker game with upgrades and achievements."
@@ -452,75 +412,39 @@ var Game = (function () {
 
     // save the game data to local storage to gameData so that it can be loaded later
     localStorage.setItem("gameData", gameDataJSON);
-    if (localStorage.getItem("gameData") !== null) lastSavedText.innerHTML = gameData.date + " (Saved)";
   }
 
-  function saveServer() {
-    const gameDataServer = new Promise((resolve, reject) => {
-      resolve();
-      reject();
-    });
+  async function saveToServer() {
+    try {
+      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: "Cookie Clicker - Game Data",
+          body: localStorage.getItem("gameData"),
+          userId: 1
+        }),
+        mode: "cors",
+        cache: "no-cache"
+      });
 
-    gameDataServer.then(() => {
-      save();
-      alert("Game data saved to server!");
-    }).catch(() => {
-      const err = new Error("Failed to save game data to server!");
-      alert(err);
-      lastSavedText.innerHTML = "Failed";
-    });
+      if (!response.ok) {
+        throw new Error("Failed to save game data to the server!");
+      }
 
-    // save the game data to the server
-    const response = fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      body: JSON.stringify(gameDataServer),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      },
-      mode: "cors"
-    });
+      const data = await response.json();
 
-    response.then((res) => {
-      if (!res.ok) throw new Error("Failed to save game data to server!");
-      return res.json();
-    });
-
-    return gameDataServer;
+      if (data) {
+        save();
+        if (localStorage.getItem("gameData") !== null) lastSavedText.innerHTML = JSON.parse(localStorage.getItem("gameData")).date + " (Saved)";
+      }
+    }
+    catch (error) {
+      console.error(error.message);
+    }
   }
-
-  function saveServerToSetInterval() {
-    const gameDataServer = new Promise((resolve, reject) => {
-      resolve();
-      reject();
-    });
-
-    gameDataServer.then(() => {
-      save();
-    }).catch(() => {
-      const err = new Error("Failed to save game data to server!");
-      console.error(err);
-      lastSavedText.innerHTML = "Failed";
-    });
-
-    // save the game data to the server
-    const response = fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      body: JSON.stringify(gameDataServer),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      },
-      mode: "cors"
-    });
-
-    response.then((res) => {
-      if (!res.ok) throw new Error("Failed to save game data to server!");
-      return res.json();
-    });
-
-    return gameDataServer;
-  }
-
-  async function saveGameToSetInterval() { await saveServerToSetInterval(); }
 
   function reset() {
     if (confirm("Are you sure you want to reset your game?")) {
@@ -528,8 +452,6 @@ var Game = (function () {
       location.reload();
     }
   }
-
-  async function saveGame() { await saveServer(); }
 
   function load() {
     let savedData = JSON.parse(localStorage.getItem("gameData"));
@@ -575,101 +497,72 @@ var Game = (function () {
     }
   }
 
-  function loadServer() {
-    const gameDataServer = new Promise((resolve, reject) => {
-      resolve();
-      reject();
-    });
-
-    gameDataServer.then(() => {
-      load();
-      alert("Game data loaded from server!");
-    }).catch(() => {
-      const err = new Error("Failed to load game data from server!");
-      alert(err);
-      loadStatusText.innerHTML = "Failed";
-    });
-
-    const response = fetch("https://jsonplaceholder.typicode.com/posts/", {
-      method: "POST",
-      body: JSON.stringify(gameDataServer),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      },
-      mode: "cors"
-    });
-
-    response.then((res) => {
-      if (!res.ok) throw new Error("Failed to load game data from server!");
-      return res.json();
-    });
-
-    return gameDataServer;
+  function loadGame() {
+    load();
+    updateScore();
+    updateBuildingUpgrades();
+    updatePowerfulUpgrades();
+    updateAchievements();
   }
 
-  async function loadGame() { await loadServer(); }
+  async function loadToServer() {
+    try {
+      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: "Cookie Clicker - Game Data",
+          body: localStorage.getItem("gameData"),
+          userId: 1
+        }),
+        mode: "cors",
+        cache: "no-cache"
+      });
 
-  function loadGameToServer() {
-    const gameDataServer = new Promise((resolve, reject) => {
-      resolve();
-      reject();
-    });
+      if (!response.ok) {
+        throw new Error("Failed to save game data to the server!");
+      }
 
-    gameDataServer.then(() => {
-      load();
-      loadStatusText.innerHTML = "Loaded!";
-    }).catch(() => {
-      const err = new Error("Failed to load game data from server!");
-      console.error(err);
-      loadStatusText.innerHTML = "Failed";
-    });
-
-    const response = fetch("https://jsonplaceholder.typicode.com/posts/", {
-      method: "POST",
-      body: JSON.stringify(gameDataServer),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      },
-      mode: "cors"
-    });
-
-    response.then((res) => {
-      if (!res.ok) throw new Error("Failed to load game data from server!");
-      return res.json();
-    });
-
-    return gameDataServer;
+      const data = await response.json();
+      
+      if (data) {
+        loadGame();
+        loadStatusText.innerHTML = "Loaded!";
+        const loadedTimeOut = setTimeout(() => { 
+          loadStatusText.innerHTML = "Never";
+          clearTimeout(loadedTimeOut);
+        }, 2000);
+      }
+    }
+    catch (error) {
+      console.error(error.message);
+    }
   }
 
-  async function loadGameToServerAsync() { await loadGameToServer(); }
-
-  saveBtn.onclick = () => { saveGame(); }
-  loadBtn.onclick = () => { loadGame(); }
+  saveBtn.onclick = () => { saveToServer(); }
+  loadBtn.onclick = () => { loadToServer(); }
   resetBtn.onclick = () => { reset(); }
 
   // Load the game data when the page load
   return {
     init: function () {
-      loadGameToServerAsync();
-      updateCookie();
-      updateCookiePerSecond();
-      updateBuildingUpgrades();
-
       // Add cookies every second based on the cookie per second
       setInterval(() => {
         stats.cookieCount += stats.getPerSecond() / fps;
-        updateCookie();
+        updateScore();
       }, (1000 / fps));
 
       // Save the game data every 10 seconds
-      setInterval(() => { saveGameToSetInterval(); }, 10000);
+      setInterval(() => { saveToServer(); }, 10000);
 
       // Check for achievements every 1/2 second for Loading and Saving
       setInterval(() => {
         for (let i = 0; i < achievement.name.length; i++) {
           switch (achievement.type[i]) {
             case "click":
-              if (stats.cookieCount >= achievement.reward[i]) achievement.unlockAchievement(i);
+              if (stats.cookiePerClick >= achievement.reward[i]) achievement.unlockAchievement(i);
               break;
             case "cookie":
               if (stats.cookieCount >= achievement.reward[i]) achievement.unlockAchievement(i);
@@ -685,8 +578,8 @@ var Game = (function () {
         updatePowerfulUpgrades();
       }, 500);
 
-      updatePowerfulUpgrades();
-      updateAchievements();
+      // load when the page load to server take check if the game data is saved
+      loadToServer();
     }
   }
 })();
