@@ -23,6 +23,7 @@ var Game = (function () {
 
   const lastSavedText = document.getElementById("last-saved");
   const loadStatusText = document.getElementById("load-status");
+  const versionText = document.getElementById("version");
 
   let million = Math.pow(10, 6);
 
@@ -377,6 +378,13 @@ var Game = (function () {
 
   let fps = 15; // frames per second
 
+  let gameInfo = {
+    version: "1.1.0",
+    date: new Date().toLocaleString(),
+    author: "https://github.com/giahaotran0820",
+    description: "A simple cookie clicker game with upgrades and achievements."
+  }
+
   // Prevent circular references
   function circlicReplacer() {
     const seen = new WeakSet();
@@ -401,10 +409,10 @@ var Game = (function () {
       buildingUpgradePerSecond: buildingUpgrade.perSecond,
       powerfulUpgradePurchased: powerfulUpgrade.purchased,
       achievementUnlocked: achievement.unlocked,
-      version: "1.1.0",
-      date: new Date().toLocaleString(),
-      author: "https://github.com/giahaotran0820",
-      description: "A simple cookie clicker game with upgrades and achievements."
+      version: gameInfo.version,
+      date: gameInfo.date,
+      author: gameInfo.author,
+      description: gameInfo.description
     }
 
     const gameDataJSON = JSON.stringify(gameData, circlicReplacer()); // Convert the game data to a JSON string to be stored in local storage had to add the circlicReplacer function to prevent circular references
@@ -493,6 +501,11 @@ var Game = (function () {
           achievement.unlocked[i] = savedData.achievementUnlocked[i];
         }
       }
+
+      if (typeof savedData.version !== "undefined") gameInfo.version = savedData.version;
+      if (typeof savedData.date !== "undefined") gameInfo.date = savedData.date;
+      if (typeof savedData.author !== "undefined") gameInfo.author = savedData.author;
+      if (typeof savedData.description !== "undefined") gameInfo.description = savedData.description;
     }
   }
 
@@ -502,6 +515,7 @@ var Game = (function () {
     updateBuildingUpgrades();
     updatePowerfulUpgrades();
     updateAchievements();
+    versionText.innerHTML = gameInfo.version;
   }
 
   async function loadToServer() {
