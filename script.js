@@ -22,7 +22,7 @@ var Game = (function () {
   const resetBtn = document.querySelector(".btn.reset");
 
   const lastSavedText = document.getElementById("last-saved");
-  const loadStatusText = document.getElementById("load-status")
+  const loadStatusText = document.getElementById("load-status");
 
   let million = Math.pow(10, 6);
 
@@ -49,10 +49,9 @@ var Game = (function () {
     cookiePerClick: 1,
     cookiePerSecond: 0,
     getPerSecond: function () {
-      let perSecond = 0;
+      this.cookiePerSecond = 0;
       for (let i = 0; i < buildingUpgrade.perSecond.length; i++) {
-        perSecond += buildingUpgrade.perSecond[i] * buildingUpgrade.level[i];
-        this.cookiePerSecond = perSecond;
+        this.cookiePerSecond += buildingUpgrade.perSecond[i] * buildingUpgrade.level[i];
       }
       return this.cookiePerSecond;
     },
