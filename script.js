@@ -280,35 +280,60 @@ var Game = (function () {
     buildingUpgradeElement.innerHTML = "";
     for (let i = 0; i < buildingUpgrade.name.length; i++) {
       const buildUpg = buildingUpgrade;
-      buildingUpgradeElement.innerHTML += `
-        <div class="building-upgrade">
-          <div class="section-left">
-            <img class="building-image" src="${buildUpg.image[i]}">
-          </div>
-          <div class="section-middle">
-            <div class="building-text">
-              <div class="building-name">${buildUpg.name[i]}</div>
-              <div class="building-cost" id="${buildUpg.name[i].toLowerCase()}-cost">
-                <span>${buildUpg.cost[i]}</span>
-                <img class="cookie-cost-image" src="assets/cookie.PNG">
-              </div>
-            </div>
-          </div>
-          <div class="section-right">
-            <div class="building-level" id="${buildUpg.name[i].toLowerCase()}-level">${buildUpg.level[i]}</div>
-          </div>
-        </div>
-      `;
 
-      const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
-      buildingUpgradeBtn.forEach((btn, index) => {
-        btn.onclick = () => {
-          const buildUpgIndex = Array.from(buildUpg.name).indexOf(btn.querySelector(".building-name").textContent);
-          const getIndex = buildUpgIndex !== -1 ? buildUpgIndex : index;
-          buildingUpgrade.buyUpgrade(getIndex);
-        }
-      });
+      const card = document.createElement("div");
+      card.className = "building-upgrade";
+
+      const sectionLeft = document.createElement("div");
+      sectionLeft.className = "section-left";
+      const buildingImg = document.createElement("img");
+      buildingImg.className = "building-image";
+      buildingImg.src = buildUpg.image[i];
+      sectionLeft.appendChild(buildingImg);
+
+      const sectionMiddle = document.createElement("div");
+      sectionMiddle.className = "section-middle";
+      const buildingText = document.createElement("div");
+      buildingText.className = "building-text";
+      const buildingName = document.createElement("div");
+      buildingName.className = "building-name";
+      buildingName.textContent = buildUpg.name[i];
+      const buildingCost = document.createElement("div");
+      buildingCost.className = "building-cost";
+      buildingCost.id = buildUpg.name[i].toLowerCase() + "-cost";
+      const costSpan = document.createElement("span");
+      costSpan.textContent = buildUpg.cost[i];
+      const cookieImg = document.createElement("img");
+      cookieImg.className = "cookie-cost-image";
+      cookieImg.src = "assets/cookie.PNG";
+      buildingCost.appendChild(costSpan);
+      buildingCost.appendChild(cookieImg);
+      buildingText.appendChild(buildingName);
+      buildingText.appendChild(buildingCost);
+      sectionMiddle.appendChild(buildingText);
+
+      const sectionRight = document.createElement("div");
+      sectionRight.className = "section-right";
+      const buildingLevel = document.createElement("div");
+      buildingLevel.className = "building-level";
+      buildingLevel.id = buildUpg.name[i].toLowerCase() + "-level";
+      buildingLevel.textContent = buildUpg.level[i];
+      sectionRight.appendChild(buildingLevel);
+
+      card.appendChild(sectionLeft);
+      card.appendChild(sectionMiddle);
+      card.appendChild(sectionRight);
+      buildingUpgradeElement.appendChild(card);
     }
+
+    const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
+    buildingUpgradeBtn.forEach((btn, index) => {
+      btn.onclick = () => {
+        const buildUpgIndex = Array.from(buildingUpgrade.name).indexOf(btn.querySelector(".building-name").textContent);
+        const getIndex = buildUpgIndex !== -1 ? buildUpgIndex : index;
+        buildingUpgrade.buyUpgrade(getIndex);
+      };
+    });
   }
 
   function updatePowerfulUpgrades() {
