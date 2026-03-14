@@ -394,31 +394,37 @@ var Game = (function () {
   }
 
   function updateAchievements() {
-    achievementElement.innerHTML = "";
+    achievementElement.textContent = "";
     for (let i = 0; i < achievement.name.length; i++) {
       const ach = achievement;
-      const statusAch = ach.unlocked[i] ? "Unlocked" : "Locked";
-      if (ach.unlocked[i]) {
-        if (ach.name[i] == "First Powerful Upgrade") {
-          achievementElement.innerHTML += `
-            <div class="achievement">
-              <img class="achievement-image" src="${ach.image[i]}">
-              <div class="achievement-name small">${ach.name[i]}</div>
-              <div class="achievement-description small">${ach.description[i]}</div>
-              <div class="achievement-status">${statusAch}</div>
-            </div>
-          `;
-        } else {
-          achievementElement.innerHTML += `
-            <div class="achievement">
-              <img class="achievement-image" src="${ach.image[i]}">
-              <div class="achievement-name">${ach.name[i]}</div>
-              <div class="achievement-description">${ach.description[i]}</div>
-              <div class="achievement-status">${statusAch}</div>
-            </div>
-          `;
-        } 
-      }
+      if (!ach.unlocked[i]) continue;
+
+      const isSmall = ach.name[i] === "First Powerful Upgrade";
+
+      const achDiv = document.createElement("div");
+      achDiv.className = "achievement";
+
+      const img = document.createElement("img");
+      img.className = "achievement-image";
+      img.src = ach.image[i];
+
+      const nameDiv = document.createElement("div");
+      nameDiv.className = isSmall ? "achievement-name small" : "achievement-name";
+      nameDiv.textContent = ach.name[i];
+
+      const descDiv = document.createElement("div");
+      descDiv.className = isSmall ? "achievement-description small" : "achievement-description";
+      descDiv.textContent = ach.description[i];
+
+      const statusDiv = document.createElement("div");
+      statusDiv.className = "achievement-status";
+      statusDiv.textContent = "Unlocked";
+
+      achDiv.appendChild(img);
+      achDiv.appendChild(nameDiv);
+      achDiv.appendChild(descDiv);
+      achDiv.appendChild(statusDiv);
+      achievementElement.appendChild(achDiv);
     }
   }
 
