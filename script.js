@@ -359,9 +359,11 @@ var Game = (function () {
           const div = document.createElement("div");
           div.className = "powerful-upgrade";
           div.id = powUpg.name[i];
+          
           const img = document.createElement("img");
           img.className = "powerful-image";
           img.src = powUpg.image[i];
+          
           div.appendChild(img);
           powerfulUpgradeElement.appendChild(div);
         } else if (
@@ -371,9 +373,11 @@ var Game = (function () {
           const div = document.createElement("div");
           div.className = "powerful-upgrade";
           div.id = powUpg.name[i];
+
           const img = document.createElement("img");
           img.className = "powerful-image";
           img.src = powUpg.image[i];
+
           div.appendChild(img);
           powerfulUpgradeElement.appendChild(div);
         }
