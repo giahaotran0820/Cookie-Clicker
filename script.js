@@ -226,8 +226,8 @@ var Game = (function () {
     }
   }
 
-  function updateCookie() { cookies.innerHTML = stats.getCookieCount(stats.cookieCount); }
-  function updateCookiePerSecond() { cookiePerSecond.innerHTML = round(stats.getPerSecond()); }
+  function updateCookie() { cookies.textContent = stats.getCookieCount(stats.cookieCount); }
+  function updateCookiePerSecond() { cookiePerSecond.textContent = round(stats.getPerSecond()); }
 
   function updateScore() {
     updateCookie();
