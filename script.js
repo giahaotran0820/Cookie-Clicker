@@ -356,20 +356,26 @@ var Game = (function () {
           powUpg.type[i] == "building" && powUpg.buildingIndex !== -1 &&
           buildingUpgrade.level[powUpg.buildingIndex[i]] >= powUpg.requirement[i]
         ) {
-          powerfulUpgradeElement.innerHTML += `
-            <div class="powerful-upgrade" id="${powUpg.name[i]}">
-              <img class="powerful-image" src="${powUpg.image[i]}">
-            </div>
-          `;
+          const div = document.createElement("div");
+          div.className = "powerful-upgrade";
+          div.id = powUpg.name[i];
+          const img = document.createElement("img");
+          img.className = "powerful-image";
+          img.src = powUpg.image[i];
+          div.appendChild(img);
+          powerfulUpgradeElement.appendChild(div);
         } else if (
           powUpg.type[i] == "click" && 
           stats.cookiePerClick >= powUpg.requirement[i]
         ) {
-           powerfulUpgradeElement.innerHTML += `
-             <div class="powerful-upgrade" id="${powUpg.name[i]}">
-               <img class="powerful-image" src="${powUpg.image[i]}">
-             </div>
-           `;
+          const div = document.createElement("div");
+          div.className = "powerful-upgrade";
+          div.id = powUpg.name[i];
+          const img = document.createElement("img");
+          img.className = "powerful-image";
+          img.src = powUpg.image[i];
+          div.appendChild(img);
+          powerfulUpgradeElement.appendChild(div);
         }
       }
       const powerfulUpgradeBtn = document.querySelectorAll(".powerful-upgrade");
