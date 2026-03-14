@@ -286,26 +286,34 @@ var Game = (function () {
 
       const sectionLeft = document.createElement("div");
       sectionLeft.className = "section-left";
+      
       const buildingImg = document.createElement("img");
       buildingImg.className = "building-image";
+      
       buildingImg.src = buildUpg.image[i];
       sectionLeft.appendChild(buildingImg);
 
       const sectionMiddle = document.createElement("div");
       sectionMiddle.className = "section-middle";
+      
       const buildingText = document.createElement("div");
       buildingText.className = "building-text";
+      
       const buildingName = document.createElement("div");
       buildingName.className = "building-name";
       buildingName.textContent = buildUpg.name[i];
+      
       const buildingCost = document.createElement("div");
       buildingCost.className = "building-cost";
       buildingCost.id = buildUpg.name[i].toLowerCase() + "-cost";
+      
       const costSpan = document.createElement("span");
       costSpan.textContent = buildUpg.cost[i];
+      
       const cookieImg = document.createElement("img");
       cookieImg.className = "cookie-cost-image";
       cookieImg.src = "assets/cookie.PNG";
+      
       buildingCost.appendChild(costSpan);
       buildingCost.appendChild(cookieImg);
       buildingText.appendChild(buildingName);
@@ -314,8 +322,10 @@ var Game = (function () {
 
       const sectionRight = document.createElement("div");
       sectionRight.className = "section-right";
+      
       const buildingLevel = document.createElement("div");
       buildingLevel.className = "building-level";
+      
       buildingLevel.id = buildUpg.name[i].toLowerCase() + "-level";
       buildingLevel.textContent = buildUpg.level[i];
       sectionRight.appendChild(buildingLevel);
@@ -323,6 +333,7 @@ var Game = (function () {
       card.appendChild(sectionLeft);
       card.appendChild(sectionMiddle);
       card.appendChild(sectionRight);
+      
       buildingUpgradeElement.appendChild(card);
     }
 
