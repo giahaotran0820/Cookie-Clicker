@@ -1,7 +1,7 @@
 /**
  * Cookie Clicker Game - A simple cookie clicker game with upgrades and achievements.
  * @description: A simple cookie clicker game with upgrades and achievements.
- * @version: 1.1.0
+ * @version: 1.1.1 Beta
  * @date: 3-7-2026
  * @author: https://github.com/giahaotran0820
  * @license: MIT
@@ -44,6 +44,13 @@ var Game = (function () {
       return mantissa.toFixed(2) + "e+" + exponent;
     } else return scaled.toFixed(3) + " " + suffix;
   }
+
+  /**
+   * Stats object to store the game stats
+   * @param {number} cookieCount - The number of cookies the player has to click
+   * @param {number} cookiePerClick - The number of cookies the player gets per click
+   * @param {number} cookiePerSecond - The number of cookies the player gets per second
+   */
 
   let stats = {
     cookieCount: 0,
@@ -277,12 +284,13 @@ var Game = (function () {
   }
 
   function updateBuildingUpgrades() {
-    buildingUpgradeElement.innerHTML = "";
+    buildingUpgradeElement.insertAdjacentHTML("beforeend", "");
     for (let i = 0; i < buildingUpgrade.name.length; i++) {
       const buildUpg = buildingUpgrade;
 
-      const card = document.createElement("div");
-      card.className = "building-upgrade";
+      const buildingContainer = document.createElement("div");
+      buildingContainer.className = "building-upgrade";
+      buildingContainer.id = buildUpg.name[i].toLowerCase();
 
       const sectionLeft = document.createElement("div");
       sectionLeft.className = "section-left";
@@ -330,31 +338,30 @@ var Game = (function () {
       buildingLevel.textContent = buildUpg.level[i];
       sectionRight.appendChild(buildingLevel);
 
-      card.appendChild(sectionLeft);
-      card.appendChild(sectionMiddle);
-      card.appendChild(sectionRight);
+      buildingContainer.appendChild(sectionLeft); // Append the Section Left to the buildingContainer
+      buildingContainer.appendChild(sectionMiddle); // Append the Section Middle to the buildingContainer
+      buildingContainer.appendChild(sectionRight); // Append the Section Right to the buildingContainer
       
-      buildingUpgradeElement.appendChild(card);
+      buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
     }
 
-    const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
-    buildingUpgradeBtn.forEach((btn, index) => {
-      btn.onclick = () => {
-        const buildUpgIndex = Array.from(buildingUpgrade.name).indexOf(btn.querySelector(".building-name").textContent);
-        const getIndex = buildUpgIndex !== -1 ? buildUpgIndex : index;
-        buildingUpgrade.buyUpgrade(getIndex);
-      };
+    const buildingUpgradeBtn = document.getElementById(`${buildUpg.name[i].toLowerCase()}`);
+    Object.keys(buildingUpgradeBtn).forEach((key) => {
+      buildingUpgradeBtn[key].onclick = () => buildingUpgrade.buyUpgrade(key);
     });
   }
 
   function updatePowerfulUpgrades() {
-    powerfulUpgradeElement.innerHTML = "";
+    powerfulUpgradeElement.insertAdjacentHTML("beforeend", "");
     for (let i = 0; i < powerfulUpgrade.name.length; i++) {
+      const buildUpg = buildingUpgrade;
       const powUpg = powerfulUpgrade;
+      
       if (!powUpg.purchased[i]) {
         if (
-          powUpg.type[i] == "building" && powUpg.buildingIndex !== -1 &&
-          buildingUpgrade.level[powUpg.buildingIndex[i]] >= powUpg.requirement[i]
+          powUpg.type[i] == "building" && 
+          powUpg.buildingIndex !== -1 &&
+          buildUpg.level[powUpg.buildingIndex[i]] >= powUpg.requirement[i]
         ) {
           const div = document.createElement("div");
           div.className = "powerful-upgrade";
@@ -382,56 +389,56 @@ var Game = (function () {
           powerfulUpgradeElement.appendChild(div);
         }
       }
-      const powerfulUpgradeBtn = document.querySelectorAll(".powerful-upgrade");
-      powerfulUpgradeBtn.forEach((btn, index) => {
-        btn.onclick = () => {
-          const powUpgIndex = Array.from(powUpg.name).indexOf(btn.id);
-          const getIndex = powUpgIndex !== -1 ? powUpgIndex : index;
-          powerfulUpgrade.purchaseUpgrade(getIndex);
-        }
+      
+      const powerfulUpgradeBtn = document.getElementById(`${powUpg.name[i]}`);
+      Object.keys(powerfulUpgradeBtn).forEach((key) => {
+        powerfulUpgradeBtn[key].onclick = () => powerfulUpgrade.purchaseUpgrade(key);
       });
     }
   }
 
   function updateAchievements() {
-    achievementElement.textContent = "";
+    achievementElement.insertAdjacentHTML("beforeend", "");
     for (let i = 0; i < achievement.name.length; i++) {
       const ach = achievement;
-      if (!ach.unlocked[i]) continue;
+      const status = ach.unlocked[i] ? "Unlocked" : "Locked";
+      
+      if (ach.unlocked[i] && status == "Unlocked") {
+        const isSmall = ach.name[i] == "First Powerful Upgrade";
 
-      const isSmall = ach.name[i] === "First Powerful Upgrade";
+        const achDiv = document.createElement("div");
+        achDiv.className = "achievement";
 
-      const achDiv = document.createElement("div");
-      achDiv.className = "achievement";
+        const img = document.createElement("img");
+        img.className = "achievement-image";
+        img.src = ach.image[i];
 
-      const img = document.createElement("img");
-      img.className = "achievement-image";
-      img.src = ach.image[i];
+        const nameDiv = document.createElement("div");
+        nameDiv.className = isSmall ? "achievement-name small" : "achievement-name";
+        nameDiv.textContent = ach.name[i];
 
-      const nameDiv = document.createElement("div");
-      nameDiv.className = isSmall ? "achievement-name small" : "achievement-name";
-      nameDiv.textContent = ach.name[i];
+        const descDiv = document.createElement("div");
+        descDiv.className = isSmall ? "achievement-description small" : "achievement-description";
+        descDiv.textContent = ach.description[i];
 
-      const descDiv = document.createElement("div");
-      descDiv.className = isSmall ? "achievement-description small" : "achievement-description";
-      descDiv.textContent = ach.description[i];
+        const statusDiv = document.createElement("div");
+        statusDiv.className = "achievement-status";
+        statusDiv.textContent = status;
 
-      const statusDiv = document.createElement("div");
-      statusDiv.className = "achievement-status";
-      statusDiv.textContent = "Unlocked";
-
-      achDiv.appendChild(img);
-      achDiv.appendChild(nameDiv);
-      achDiv.appendChild(descDiv);
-      achDiv.appendChild(statusDiv);
-      achievementElement.appendChild(achDiv);
+        achDiv.appendChild(img);
+        achDiv.appendChild(nameDiv);
+        achDiv.appendChild(descDiv);
+        achDiv.appendChild(statusDiv);
+      
+        achievementElement.appendChild(achDiv);
+      }
     }
   }
 
   let fps = 15; // frames per second
 
   let gameInfo = {
-    version: "1.1.0",
+    version: "1.1.1 Beta",
     date: new Date().toLocaleString(),
     author: "https://github.com/giahaotran0820",
     description: "A simple cookie clicker game with upgrades and achievements."
@@ -567,7 +574,7 @@ var Game = (function () {
     updateBuildingUpgrades();
     updatePowerfulUpgrades();
     updateAchievements();
-    versionText.innerHTML = gameInfo.version;
+    versionText.textContent = gameInfo.version;
   }
 
   async function loadToServer() {
@@ -594,9 +601,9 @@ var Game = (function () {
       
       if (data) {
         loadGame();
-        loadStatusText.innerHTML = "Loaded!";
+        loadStatusText.textContent = "Loaded!";
         const loadedTimeOut = setTimeout(() => { 
-          loadStatusText.innerHTML = "Never";
+          loadStatusText.textContent = "Never";
           clearTimeout(loadedTimeOut);
         }, 2000);
       }
