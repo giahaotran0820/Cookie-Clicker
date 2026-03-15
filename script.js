@@ -45,6 +45,24 @@ var Game = (function () {
     } else return scaled.toFixed(3) + " " + suffix;
   }
 
+  class CountPerSecond {
+    constructor(perSecond) {
+      this.perSecond = perSecond;
+    }
+
+    get perSecond() {
+      return this.perSecond;
+    }
+
+    set perSecond(perSecond) {
+      this.perSecond = perSecond;
+      for (let i = 0; i < buildingUpgrade.name.length; i++) {
+        this.perSecond += buildingUpgrade.perSecond[i] * buildingUpgrade.level[i];
+        this.perSecond = this.perSecond;
+      }
+    }
+  }
+
   /**
    * Stats object to store the game stats
    * @param {number} cookieCount - The number of cookies the player has to click
@@ -57,11 +75,8 @@ var Game = (function () {
     cookiePerClick: 1,
     cookiePerSecond: 0,
     getPerSecond: function () {
-      this.cookiePerSecond = 0;
-      for (let i = 0; i < buildingUpgrade.perSecond.length; i++) {
-        this.cookiePerSecond += buildingUpgrade.perSecond[i] * buildingUpgrade.level[i];
-      }
-      return this.cookiePerSecond;
+      const perSecond = new CountPerSecond(this.cookiePerSecond);
+      return perSecond.perSecond;
     },
     getCookieCount: function (count) {
       const setCookieCount = round(count) > 1 ? round(count) + " Cookies" : round(count) + " Cookie"; // if cookieCount is greater than 1, then add an "s" to the end of "Cookie" (this is to make the game display "Cookies" instead of "Cookie" when the cookieCount is greater than 1)
@@ -79,7 +94,7 @@ var Game = (function () {
       return cookieCount;
     }
   }
-
+  
   let buildingUpgrade = {
     name: [
       "Cursor",
