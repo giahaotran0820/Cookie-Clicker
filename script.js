@@ -284,7 +284,7 @@ var Game = (function () {
   }
 
   function updateBuildingUpgrades() {
-    buildingUpgradeElement.insertAdjacentHTML("beforeend", "");
+    buildingUpgradeElement.innerHTML = "";
     for (let i = 0; i < buildingUpgrade.name.length; i++) {
       const buildUpg = buildingUpgrade;
 
@@ -346,13 +346,11 @@ var Game = (function () {
     }
 
     const buildingUpgradeBtn = document.getElementById(`${buildUpg.name[i].toLowerCase()}`);
-    Object.keys(buildingUpgradeBtn).forEach((key) => {
-      buildingUpgradeBtn[key].onclick = () => buildingUpgrade.buyUpgrade(key);
-    });
+    buildingUpgradeBtn.onclick = () => { buildUpg.buyUpgrade(i); }
   }
 
   function updatePowerfulUpgrades() {
-    powerfulUpgradeElement.insertAdjacentHTML("beforeend", "");
+    powerfulUpgradeElement.innerHTML = "";
     for (let i = 0; i < powerfulUpgrade.name.length; i++) {
       const buildUpg = buildingUpgrade;
       const powUpg = powerfulUpgrade;
@@ -391,14 +389,12 @@ var Game = (function () {
       }
       
       const powerfulUpgradeBtn = document.getElementById(`${powUpg.name[i]}`);
-      Object.keys(powerfulUpgradeBtn).forEach((key) => {
-        powerfulUpgradeBtn[key].onclick = () => powerfulUpgrade.purchaseUpgrade(key);
-      });
+      powerfulUpgradeBtn.onclick = () => { powUpg.purchaseUpgrade(i); }
     }
   }
 
   function updateAchievements() {
-    achievementElement.insertAdjacentHTML("beforeend", "");
+    achievementElement.innerHTML = "";
     for (let i = 0; i < achievement.name.length; i++) {
       const ach = achievement;
       const status = ach.unlocked[i] ? "Unlocked" : "Locked";
