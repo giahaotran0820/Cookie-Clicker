@@ -342,16 +342,15 @@ var Game = (function () {
       buildingContainer.appendChild(sectionRight); // Append the Section Right to the buildingContainer
       
       buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
+      const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
+      buildingUpgradeBtn.forEach((btn, index) => {
+        btn.onclick = () => {
+          const arrayIndex = Array.from(buildUpg.name).indexOf(btn.querySelector(".building-name").textContent);
+          const isIndex = arrayIndex !== -1 ? arrayIndex : index;
+          buildUpg.buyUpgrade(isIndex);
+        }
+      });
     }
-
-    const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
-    buildingUpgradeBtn.forEach((btn, index) => {
-      btn.onclick = () => {
-        const arrayIndex = Array.from(buildUpg.name).indexOf(btn.querySelector(".building-name").textContent);
-        const isIndex = arrayIndex !== -1 ? arrayIndex : index;
-        buildUpg.buyUpgrade(isIndex);
-      }
-    });
   }
 
   function updatePowerfulUpgrades() {
