@@ -290,7 +290,6 @@ var Game = (function () {
 
       const buildingContainer = document.createElement("div");
       buildingContainer.className = "building-upgrade";
-      buildingContainer.id = buildUpg.name[i].toLowerCase();
 
       const sectionLeft = document.createElement("div");
       sectionLeft.className = "section-left";
@@ -345,8 +344,14 @@ var Game = (function () {
       buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
     }
 
-    const buildingUpgradeBtn = document.getElementById(`${buildUpg.name[i].toLowerCase()}`);
-    buildingUpgradeBtn.onclick = () => { buildUpg.buyUpgrade(i); }
+    const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
+    buildingUpgradeBtn.forEach((btn, index) => {
+      btn.onclick = () => {
+        const arrayIndex = Array.from(buildUpg.name).indexOf(btn.querySelector(".building-name").textContent);
+        const isIndex = arrayIndex !== -1 ? arrayIndex : index;
+        buildUpg.buyUpgrade(isIndex);
+      }
+    });
   }
 
   function updatePowerfulUpgrades() {
@@ -388,8 +393,14 @@ var Game = (function () {
         }
       }
       
-      const powerfulUpgradeBtn = document.getElementById(`${powUpg.name[i]}`);
-      powerfulUpgradeBtn.onclick = () => { powUpg.purchaseUpgrade(i); }
+      const powerfulUpgradeBtn = document.querySelectorAll(".powerful-upgrade");
+      powerfulUpgradeBtn.forEach((btn, index) => {
+        btn.onclick = () => {
+          const arrayIndex = Array.from(powUpg.name).indexOf(btn.id);
+          const isIndex = arrayIndex !== -1 ? arrayIndex : index;
+          powUpg.purchaseUpgrade(isIndex);
+        }
+      });
     }
   }
 
