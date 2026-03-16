@@ -520,7 +520,7 @@ var Game = (function () {
 
       if (data) {
         save();
-        if (localStorage.getItem("gameData") !== null) lastSavedText.innerHTML = JSON.parse(localStorage.getItem("gameData")).date + " (Saved)";
+        if (localStorage.getItem("gameData") !== null) lastSavedText.textContent = JSON.parse(localStorage.getItem("gameData")).date + " (Saved)";
       }
     }
     catch (error) {
