@@ -59,18 +59,18 @@ var Game = (function () {
     getPerSecond: function () {
       stats.cookiePerSecond = 0;
       for (let i = 0; i < buildingUpgrade.name.length; i++) {
-        let perSec = buildingUpgrade.basePerSecond[i] * buildingUpgrade.level[i];
-        for (let j = 0; j < powerfulUpgrade.purchased.length; j++) {
+        let basePerSec = buildingUpgrade.increase[i] * buildingUpgrade.level[i];
+        for (let j = 0; j < powerfulUpgrade.name.length; j++) {
           if (
             powerfulUpgrade.purchased[j] &&
             powerfulUpgrade.type[j] === "building" &&
             powerfulUpgrade.buildingIndex[j] === i &&
             buildingUpgrade.name[i] !== "Cursor"
           ) {
-            perSec *= powerfulUpgrade.bonus[j];
+            basePerSec *= powerfulUpgrade.bonus[j];
           }
         }
-        stats.cookiePerSecond += perSec;
+        stats.cookiePerSecond += basePerSec;
       }
       return stats.cookiePerSecond;
     },
@@ -102,8 +102,7 @@ var Game = (function () {
     ],
     cost: [10, 100, 800, 4700, 26000, 140000],
     level: [0, 0, 0, 0, 0, 0],
-    basePerSecond: [0.1, 1, 8, 47, 260, 1400],
-    perSecond: [0.1, 1, 8, 47, 260, 1400],
+    increase: [0.1, 1, 8, 47, 260, 1400],
     image: [
       "assets/cursor.PNG",
       "assets/grandma.JPG",
@@ -482,7 +481,7 @@ var Game = (function () {
       cookiePerSecond: stats.cookiePerSecond,
       buildingUpgradeCost: buildingUpgrade.cost,
       buildingUpgradeLevel: buildingUpgrade.level,
-      buildingUpgradePerSecond: buildingUpgrade.perSecond,
+      buildingUpgradeIncrease: buildingUpgrade.increase,
       powerfulUpgradePurchased: powerfulUpgrade.purchased,
       achievementUnlocked: achievement.unlocked,
       version: gameInfo.version,
@@ -558,9 +557,9 @@ var Game = (function () {
       }
 
       // building upgrades per second as an array
-      if (typeof savedData.buildingUpgradePerSecond !== "undefined") {
-        for (let i = 0; i < savedData.buildingUpgradePerSecond.length; i++) {
-          buildingUpgrade.perSecond[i] = savedData.buildingUpgradePerSecond[i];
+      if (typeof savedData.buildingUpgradeIncrease !== "undefined") {
+        for (let i = 0; i < savedData.buildingUpgradeIncrease.length; i++) {
+          buildingUpgrade.increase[i] = savedData.buildingUpgradeIncrease[i];
         }
       }
 
