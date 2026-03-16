@@ -1,8 +1,8 @@
 /**
  * Cookie Clicker Game - A simple cookie clicker game with upgrades and achievements.
  * @description: A simple cookie clicker game with upgrades and achievements.
- * @version: 1.1.1 Beta
- * @date: 3-7-2026
+ * @version: 1.1.2 Beta
+ * @date: 3-16-2026
  * @author: https://github.com/giahaotran0820
  * @license: MIT
  */
@@ -130,7 +130,8 @@ var Game = (function () {
     name: [
       "Reinforced Index Finger",
       "Carpal Tunnel Prevention Cream",
-      "Forwards From Grandma"
+      "Forwards From Grandma",
+      "+1 Cookie Per Click"
     ],
     image: [
       "assets/reinforced_index_finger.jpg",
@@ -140,22 +141,25 @@ var Game = (function () {
     type: [
       "building",
       "building",
-      "building"
+      "building",
+      "click"
     ],
     description: [
       "The mouse and cursors are twice as efficient.",
       "The mouse and cursors are twice as efficient.",
-      "Grandmas are twice as efficient."
+      "Grandmas are twice as efficient.",
+      "Your clicks are +1 more powerful."
     ],
-    cost: [300, 500, 1000],
-    buildingIndex: [0, 0, 1],
-    requirement: [1, 1, 1],
-    bonus: [2, 2, 2],
+    cost: [300, 500, 1000, 400],
+    buildingIndex: [0, 0, 1, -1],
+    requirement: [1, 1, 1, 4],
+    bonus: [2, 2, 2, 1],
     purchased: [false, false, false],
     purchaseUpgrade: function (index) {
       if (!this.purchased[index] && stats.cookieCount >= this.cost[index]) {
         if (
-          this.type[index] == "building" && this.buildingIndex !== -1 &&
+          this.type[index] == "building" &&
+          this.buildingIndex[index] != -1 &&
           buildingUpgrade.level[this.buildingIndex[index]] >= this.requirement[index]
         ) {
           if (buildingUpgrade.name[this.buildingIndex[index]] == "Cursor") {
@@ -173,15 +177,25 @@ var Game = (function () {
             updateScore();
           }
         } else if (
-          this.type[index] == "click" && 
+          this.type[index] == "click" &&
+          this.buildingIndex[index] == -1 &&
           stats.cookiePerClick >= this.requirement[index]
         ) {
-          stats.cookieCount -= this.cost[index];
-          stats.cookiePerClick *= this.bonus[index];
-          this.purchased[index] = true;
+          if (this.name[index] == "+1 Cookie Per Click") {
+            stats.cookieCount -= this.cost[index];
+            stats.cookiePerClick += this.bonus[index];
+            this.purchased[index] = true;
 
-          updateBuildingUpgrades();
-          updateScore();
+            updateBuildingUpgrades();
+            updateScore();
+          } else {
+            stats.cookieCount -= this.cost[index];
+            stats.cookiePerClick *= this.bonus[index];
+            this.purchased[index] = true;
+
+            updateBuildingUpgrades();
+            updateScore();
+          }
         }
       } else {
         alert(`Not enough cookies! You need ${round(this.cost[index] - stats.cookieCount)} more cookies to buy this powerful upgrade!`);
@@ -371,8 +385,8 @@ var Game = (function () {
       
       if (!powUpg.purchased[i]) {
         if (
-          powUpg.type[i] == "building" && 
-          powUpg.buildingIndex !== -1 &&
+          powUpg.type[i] == "building" &&
+          powUpg.buildingIndex[i] !== -1 &&
           buildUpg.level[powUpg.buildingIndex[i]] >= powUpg.requirement[i]
         ) {
           const div = document.createElement("div");
@@ -386,7 +400,8 @@ var Game = (function () {
           div.appendChild(img);
           powerfulUpgradeElement.appendChild(div);
         } else if (
-          powUpg.type[i] == "click" && 
+          powUpg.type[i] == "click" &&
+          powUpg.buildingIndex[i] == -1 &&
           stats.cookiePerClick >= powUpg.requirement[i]
         ) {
           const div = document.createElement("div");
@@ -454,7 +469,7 @@ var Game = (function () {
   let fps = 15; // frames per second
 
   let gameInfo = {
-    version: "1.1.1 Beta",
+    version: "1.1.2 Beta",
     date: new Date().toLocaleString(),
     author: "https://github.com/giahaotran0820",
     description: "A simple cookie clicker game with upgrades and achievements."
