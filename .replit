@@ -1,5 +1,5 @@
 entrypoint = "index.html"
-modules = ["web"]
+modules = ["web", "python-3.11"]
 
 [nix]
 channel = "stable-24_11"
@@ -10,24 +10,37 @@ publicDir = "/"
 deploymentTarget = "static"
 
 [workflows]
-runButton = "Serve static"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Serve static"
 mode = "parallel"
+author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = """
-echo \"Serving HTML, open the Preview to see your output.
-To see changes you make, you can hit the refresh button in the preview, you do \u001B[1mnot\u001B[0m have to stop and run again.
-Console logs are available in the Preview devtools or your browser devtools.\" && static-web-server -w ./.config/static-web-server.toml > /dev/null 2>&1
-"""
-waitForPort = 80
+args = "python3 -m http.server 5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Serve static"
 
 [[ports]]
 localPort = 80
 externalPort = 80
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
 
 [agent]
 expertMode = true

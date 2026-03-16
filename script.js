@@ -59,7 +59,18 @@ var Game = (function () {
     getPerSecond: function () {
       stats.cookiePerSecond = 0;
       for (let i = 0; i < buildingUpgrade.name.length; i++) {
-        stats.cookiePerSecond += buildingUpgrade.perSecond[i] * buildingUpgrade.level[i];
+        let perSec = buildingUpgrade.basePerSecond[i] * buildingUpgrade.level[i];
+        for (let j = 0; j < powerfulUpgrade.purchased.length; j++) {
+          if (
+            powerfulUpgrade.purchased[j] &&
+            powerfulUpgrade.type[j] === "building" &&
+            powerfulUpgrade.buildingIndex[j] === i &&
+            buildingUpgrade.name[i] !== "Cursor"
+          ) {
+            perSec *= powerfulUpgrade.bonus[j];
+          }
+        }
+        stats.cookiePerSecond += perSec;
       }
       return stats.cookiePerSecond;
     },
@@ -91,6 +102,7 @@ var Game = (function () {
     ],
     cost: [10, 100, 800, 4700, 26000, 140000],
     level: [0, 0, 0, 0, 0, 0],
+    basePerSecond: [0.1, 1, 8, 47, 260, 1400],
     perSecond: [0.1, 1, 8, 47, 260, 1400],
     image: [
       "assets/cursor.PNG",
@@ -156,7 +168,6 @@ var Game = (function () {
             updateScore();
           } else {
             stats.cookieCount -= this.cost[index];
-            buildingUpgrade.perSecond[this.buildingIndex[index]] *= this.bonus[index];
             this.purchased[index] = true;
 
             updateBuildingUpgrades();
