@@ -26,13 +26,14 @@ body {
 }
 
 .cookie-clicker-img:hover {
-  transform: scale(0.95);
-  transition: transform 0.2s ease-in-out;
+  filter: brightness(95%);
+  transition: filter 0.2s ease-in-out;
 }
 
 .cookie-clicker-img:active {
-  transform: scale(0.9);
-  transition: transform 0.2s ease-in-out;
+  filter: brightness(90%);
+  transform: scale(0.95);
+  transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 .container {
   display: flex;
