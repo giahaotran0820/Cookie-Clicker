@@ -136,7 +136,8 @@ var Game = (function () {
     image: [
       "assets/reinforced_index_finger.jpg",
       "assets/carpal_tunnel_prevention_cream.jpg",
-      "assets/forwards_from_grandma.jpg"
+      "assets/forwards_from_grandma.jpg",
+      "assets/cursor.PNG"
     ],
     type: [
       "building",
