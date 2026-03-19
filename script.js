@@ -76,17 +76,11 @@ var Game = (function () {
     },
     getCookieCount: function (count) {
       const setCookieCount = round(count) > 1 ? round(count) + " Cookies" : round(count) + " Cookie"; // if cookieCount is greater than 1, then add an "s" to the end of "Cookie" (this is to make the game display "Cookies" instead of "Cookie" when the cookieCount is greater than 1)
-
       const zeroCookieCount = round(count) == 0 ? "0 Cookies" : setCookieCount; // if cookieCount is 0, then set it to "0 Cookies" (this is to prevent the game from displaying "0 Cookie" when the stats.cookieCount is 0)
-
       const defaultCookieCount = round(count) < 0 ? "0 Cookies" : zeroCookieCount; // if cookieCount is less than 0, then set it to "0 Cookies" (negative cookies are not allowed)
-
-      const commaCookieCount = String(defaultCookieCount).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // add commas to the cookieCount (this is to make the game display "1,000 Cookies" instead of "1000 Cookies")
-      
+      const commaCookieCount = String(defaultCookieCount).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // add commas to the cookieCount (this is to make the game display "1,000 Cookies" instead of "1000 Cookies") 
       const formattedCookieCount = formatNumber(count) + " Cookies"; // format the cookieCount to display "1.000 Million Cookies" instead of "1000000 Cookies" when the cookieCount is greater than or equal to 1,000,000
-      
       const cookieCount = count >= million ? formattedCookieCount : commaCookieCount; // if cookieCount is greater than or equal to 1,000,000, then format the cookieCount to display "1.000 Million Cookies" instead of "1,000,000 Cookies"
-      
       return cookieCount;
     }
   }

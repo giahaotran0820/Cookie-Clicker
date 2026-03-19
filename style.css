@@ -23,6 +23,12 @@ body {
   height: 200px;
   cursor: pointer;
   border-radius: 50%;
+  animation: rotate 100s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .cookie-clicker-img:hover {
@@ -32,9 +38,10 @@ body {
 
 .cookie-clicker-img:active {
   filter: brightness(90%);
-  transform: scale(0.95);
+  transform: scale(0.9);
   transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
+
 .container {
   display: flex;
   align-items: center;
