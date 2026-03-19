@@ -1,8 +1,8 @@
 /**
  * Cookie Clicker Game - A simple cookie clicker game with upgrades and achievements.
  * @description: A simple cookie clicker game with upgrades and achievements.
- * @version: 1.1.2 Beta
- * @date: 3-16-2026
+ * @version: 1.1.2 Beta 1.1
+ * @date: 3-19-2026
  * @author: https://github.com/giahaotran0820
  * @license: MIT
  */
@@ -362,9 +362,7 @@ var Game = (function () {
       buildingLevel.textContent = buildUpg.level[i];
       sectionRight.appendChild(buildingLevel);
 
-      buildingContainer.appendChild(sectionLeft); // Append the Section Left to the buildingContainer
-      buildingContainer.appendChild(sectionMiddle); // Append the Section Middle to the buildingContainer
-      buildingContainer.appendChild(sectionRight); // Append the Section Right to the buildingContainer
+      buildingContainer.append(sectionLeft, sectionMiddle, sectionRight); // Append the Section Left, Section Middle, and Section Right to the buildingContainer
       
       buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
       const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
@@ -457,10 +455,7 @@ var Game = (function () {
         statusDiv.className = "achievement-status";
         statusDiv.textContent = status;
 
-        achDiv.appendChild(img);
-        achDiv.appendChild(nameDiv);
-        achDiv.appendChild(descDiv);
-        achDiv.appendChild(statusDiv);
+        achDiv.append(img, nameDiv, descDiv, statusDiv);
       
         achievementElement.appendChild(achDiv);
       }
@@ -470,7 +465,7 @@ var Game = (function () {
   let fps = 15; // frames per second
 
   let gameInfo = {
-    version: "1.1.2 Beta",
+    version: "1.1.2 Beta 1.1",
     date: new Date().toLocaleString(),
     author: "https://github.com/giahaotran0820",
     description: "A simple cookie clicker game with upgrades and achievements."
@@ -512,39 +507,19 @@ var Game = (function () {
     localStorage.setItem("gameData", gameDataJSON);
   }
 
-  async function saveToServer() {
+  function saveStatus() {
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: "Cookie Clicker - Game Data",
-          body: localStorage.getItem("gameData"),
-          userId: 1
-        }),
-        mode: "cors",
-        cache: "no-cache"
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save game data to the server!");
-      }
-
-      const data = await response.json();
-
-      if (data) {
-        save();
-        if (localStorage.getItem("gameData") !== null) lastSavedText.textContent = JSON.parse(localStorage.getItem("gameData")).date + " (Saved)";
-      }
+      save();
+      lastSavedText.textContent = gameInfo.date;
     }
     catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) lastSavedText.textContent = "Error saving game data!";
     }
   }
 
-  function reset() {
+  function saveGame() { saveStatus(); }
+  
+  function resetGame() {
     if (confirm("Are you sure you want to reset your game?")) {
       localStorage.clear();
       location.reload();
@@ -600,7 +575,7 @@ var Game = (function () {
     }
   }
 
-  function loadGame() {
+  function loadServer() {
     load();
     updateScore();
     updateBuildingUpgrades();
@@ -609,45 +584,26 @@ var Game = (function () {
     versionText.textContent = gameInfo.version;
   }
 
-  async function loadToServer() {
+  function loadStatus() {
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: "Cookie Clicker - Game Data",
-          body: localStorage.getItem("gameData"),
-          userId: 1
-        }),
-        mode: "cors",
-        cache: "no-cache"
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save game data to the server!");
-      }
-
-      const data = await response.json();
-      
-      if (data) {
-        loadGame();
-        loadStatusText.textContent = "Loaded!";
-        const loadedTimeOut = setTimeout(() => { 
-          loadStatusText.textContent = "Never";
-          clearTimeout(loadedTimeOut);
-        }, 2000);
-      }
+      let loadSuccess;
+      loadServer();
+      loadStatusText.textContent = "Game data loaded successfully!";
+      loadSuccess = setTimeout(() => { 
+        loadStatusText.textContent = "Never";
+        clearTimeout(loadSuccess);
+      }, 3000);
     }
     catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) loadStatusText.textContent = "Error loading game data!";
     }
   }
 
-  saveBtn.onclick = () => { saveToServer(); }
-  loadBtn.onclick = () => { loadToServer(); }
-  resetBtn.onclick = () => { reset(); }
+  function loadGame() { loadStatus(); }
+
+  saveBtn.onclick = () => { saveGame(); }
+  loadBtn.onclick = () => { loadGame(); }
+  resetBtn.onclick = () => { resetGame(); }
 
   // Load the game data when the page load
   return {
@@ -659,7 +615,7 @@ var Game = (function () {
       }, (1000 / fps));
 
       // Save the game data every 10 seconds
-      setInterval(() => { saveToServer(); }, 10000);
+      setInterval(() => { saveGame(); }, 10000);
 
       // Check for achievements every 1/2 second for Loading and Saving
       setInterval(() => {
@@ -683,7 +639,7 @@ var Game = (function () {
       }, 500);
 
       // load when the page load to server take check if the game data is saved
-      loadToServer();
+      loadGame();
     }
   }
 })();
