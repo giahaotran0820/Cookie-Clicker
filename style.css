@@ -24,6 +24,7 @@ body {
   aspect-ratio: 1 / 1;
   cursor: pointer;
   border-radius: 50%;
+  filter: drop-shadow(0 0 3px #000);
   animation: rotate 100s linear infinite;
 }
 
@@ -33,15 +34,15 @@ body {
 }
 
 .cookie-clicker-img:hover {
-  width: 100%
-  filter: brightness(95%);
-  transition: width 0.2s ease-in-out, filter 0.2s ease-in-out;
+  width: 98%;
+  filter: brightness(90%);
+  transition: width 0.25s ease-in-out, filter 0.25s ease-in-out;
 }
 
 .cookie-clicker-img:active {
-  width: 90%;
-  filter: brightness(90%);
-  transition: width 0.2s ease-in-out, filter 0.2s ease-in-out;
+  width: 96%;
+  filter: brightness(80%);
+  transition: width 0.25s ease-in-out, filter 0.25s ease-in-out;
 }
 
 .container {
@@ -59,13 +60,15 @@ body {
 }
 
 .cookie-stats {
+  position: relative;
   width: 300px;
   text-align: center;
   padding: 10px;
   color: #fff;
   background: rgba(50, 50, 50, 0.4);
   border-radius: 5px;
-  margin-bottom: 10px;
+  top: 30px;
+  margin-bottom: 50px;
   box-shadow: 0 0 5px #000;
 }
 
