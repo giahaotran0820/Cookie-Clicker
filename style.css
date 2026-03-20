@@ -19,8 +19,9 @@ body {
 }
 
 .cookie-clicker-img {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
   cursor: pointer;
   border-radius: 50%;
   animation: rotate 100s linear infinite;
@@ -32,14 +33,15 @@ body {
 }
 
 .cookie-clicker-img:hover {
+  width: 100%
   filter: brightness(95%);
-  transition: filter 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, filter 0.2s ease-in-out;
 }
 
 .cookie-clicker-img:active {
+  width: 90%;
   filter: brightness(90%);
-  transform: scale(0.9);
-  transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, filter 0.2s ease-in-out;
 }
 
 .container {
