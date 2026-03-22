@@ -17,11 +17,13 @@ body {
   background: url("assets/background/background.JPG") no-repeat center center fixed;
   background-size: cover;
 }
+
 .cookie-clicker {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .cookie-clicker-img {
   width: 100%;
   max-width: 200px;
@@ -30,6 +32,29 @@ body {
   border-radius: 50%;
   filter: drop-shadow(0 0 3px #000);
   animation: rotate 100s linear infinite;
+}
+
+.info {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  width: 240px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.building-upgrade:hover .info {
+  opacity: 1;
 }
 
 @keyframes rotate {

@@ -356,7 +356,11 @@ var Game = (function () {
       buildingLevel.textContent = buildUpg.level[i];
       sectionRight.appendChild(buildingLevel);
 
-      buildingContainer.append(sectionLeft, sectionMiddle, sectionRight); // Append the Section Left, Section Middle, and Section Right to the buildingContainer
+      const buildingUpgradeInfo = document.createElement("div");
+      buildingUpgradeInfo.className = "info";
+      buildingUpgradeInfo.textContent = `Each ${buildUpg.name[i]} produces ${buildUpg.increase[i]} cookies per second.`;
+
+      buildingContainer.append(sectionLeft, sectionMiddle, sectionRight, buildingUpgradeInfo); // Append the Section Left, Section Middle, and Section Right to the buildingContainer
       
       buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
       const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
