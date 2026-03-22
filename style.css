@@ -19,6 +19,7 @@ body {
 }
 
 .cookie-clicker-img {
+  position: absolute;
   width: 100%;
   max-width: 200px;
   aspect-ratio: 1 / 1;
