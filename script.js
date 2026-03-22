@@ -114,8 +114,6 @@ var Game = (function () {
 
         updateBuildingUpgrades();
         updateScore();
-      } else {
-        alert(`Not enough cookies! You need ${round(this.cost[index] - stats.cookieCount)} more cookies to buy this building upgrade!`);
       }
     }
   }
@@ -192,8 +190,6 @@ var Game = (function () {
             updateScore();
           }
         }
-      } else {
-        alert(`Not enough cookies! You need ${round(this.cost[index] - stats.cookieCount)} more cookies to buy this powerful upgrade!`);
       }
     }
   }
@@ -363,6 +359,7 @@ var Game = (function () {
       buildingContainer.append(sectionLeft, sectionMiddle, sectionRight, buildingUpgradeInfo); // Append the Section Left, Section Middle, and Section Right to the buildingContainer
       
       buildingUpgradeElement.appendChild(buildingContainer); // Append Building Container to the DOM (buildingUpgradeElement) with the class of "building-upgrades" instead of "building-upgrade"
+      
       const buildingUpgradeBtn = document.querySelectorAll(".building-upgrade");
       buildingUpgradeBtn.forEach((btn, index) => {
         btn.onclick = () => {
