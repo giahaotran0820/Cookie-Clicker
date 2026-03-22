@@ -17,11 +17,12 @@ body {
   background: url("assets/background/background.JPG") no-repeat center center fixed;
   background-size: cover;
 }
-
-.cookie-clicker-img {
+.cookie-clicker {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.cookie-clicker-img {
   width: 100%;
   max-width: 200px;
   aspect-ratio: 1 / 1;
