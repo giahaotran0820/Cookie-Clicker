@@ -392,6 +392,15 @@ var Game = (function () {
           img.src = powUpg.image[i];
           
           div.appendChild(img);
+
+          const powerfulUpgradeInfo = document.createElement("div");
+          powerfulUpgradeInfo.className = "info";
+          powerfulUpgradeInfo.textContent = `
+            ${powUpg.description[i]}
+            Cost: ${powUpg.cost[i]} Cookies
+          `;
+
+          div.appendChild(powerfulUpgradeInfo);
           powerfulUpgradeElement.appendChild(div);
         } else if (
           powUpg.type[i] == "click" &&
@@ -407,6 +416,15 @@ var Game = (function () {
           img.src = powUpg.image[i];
 
           div.appendChild(img);
+
+          const powerfulUpgradeInfo = document.createElement("div");
+          powerfulUpgradeInfo.className = "info";
+          powerfulUpgradeInfo.textContent = `
+            ${powUpg.description[i]}
+            Cost: ${powUpg.cost[i]} Cookies
+          `;
+
+          div.appendChild(powerfulUpgradeInfo);
           powerfulUpgradeElement.appendChild(div);
         }
       }
