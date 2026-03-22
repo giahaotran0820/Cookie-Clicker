@@ -45,16 +45,13 @@ body {
   border-radius: 6px;
   font-size: 12px;
   width: 240px;
+  height: 50px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
   z-index: 100;
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
   border: 1px solid rgba(255,255,255,0.2);
-}
-
-.building-upgrade:hover .info {
-  opacity: 1;
 }
 
 @keyframes rotate {
@@ -146,6 +143,10 @@ body {
 .shop .building-upgrade .section-middle .building-text .cookie-cost-image {
   width: 12px;
   height: 12px;
+}
+
+.shop .building-upgrade:hover .info {
+  opacity: 1;
 }
 
 .settings {
